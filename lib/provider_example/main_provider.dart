@@ -101,10 +101,20 @@ class _LoginPageState extends State<LoginPage> {
                 if (loginProvider.isLoading) {
                   return CircularProgressIndicator();
                 }
+                if (loginProvider.hasError) {
+                  WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+                    _showError(context, loginProvider.lastError);
+                  });
+                }
                 return child;
               },
               child: RaisedButton(
-                onPressed: () {},
+                onPressed: () {
+                  var email = _emailController.text;
+                  var password = _passwordController.text;
+                  Provider.of<LoginProvider>(context, listen: false)
+                      .login(email, password);
+                },
                 child: Text("Log in"),
               ),
             ),
